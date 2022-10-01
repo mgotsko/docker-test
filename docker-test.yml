@@ -1,0 +1,36 @@
+---
+- name: docker test
+  hosts: docker-test
+  become: true
+  tasks:
+    - name: remove old docker 
+      yum:
+        name: "{{ item }}"
+        state: absent
+      with_items: 
+        - "docker"
+        - "docker-common"
+        - "docker-selinux"
+        - "docker-engine-selinux"
+        - "docker-engine"
+        - "docker-ce"
+    - name: install additional needed packages
+      yum:
+        name: "{{ item }}"
+        state: present
+      with_items:
+        - "yum-utils"
+        - "device-mapper-persistent-data"
+        - "lvm2"
+
+    - name: configure docker repo
+      yum_repository:
+        name: present
+        file: external_file
+        baseurl: https://download.docker.com/linux/centos/docker-ce.repo
+        enabled: true
+
+    - name: install dockere
+      yum:
+        name: docker-ce
+        state: present
