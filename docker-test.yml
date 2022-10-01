@@ -39,7 +39,7 @@
       yum:
         update_only: yes
         update_cache: yes
-    - name: install dockere
+    - name: install docker & docker-compose
       yum:
-        name: docker-ce
+        name: [docker-ce, docker-compose]
         state: present
