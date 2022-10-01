@@ -14,6 +14,13 @@
         - "docker-engine-selinux"
         - "docker-engine"
         - "docker-ce"
+    - name: update yum
+      yum:
+        update_only: yes
+        update_cache: yes
+    - name: install epel-release repo
+      yum:
+        name: epel-release
     - name: install additional needed packages
       yum:
         name: "{{ item }}"
@@ -22,14 +29,16 @@
         - "yum-utils"
         - "device-mapper-persistent-data"
         - "lvm2"
-
-    - name: configure docker repo
-      yum_repository:
-        name: present
-        file: external_file
-        baseurl: https://download.docker.com/linux/centos/docker-ce.repo
-        enabled: true
-
+   
+    - name: download docker repo
+      get_url:
+        url: https://download.docker.com/linux/centos/docker-ce.repo
+        dest: /etc/yum.repos.d/
+        mode: '0700'
+    - name: update yum
+      yum:
+        update_only: yes
+        update_cache: yes
     - name: install dockere
       yum:
         name: docker-ce
