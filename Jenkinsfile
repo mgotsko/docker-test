@@ -1,13 +1,8 @@
 pipeline {
-  agent any
+  agent {label 'windows-1'}
   stages {
     stage('hello') {
-      agent {
-        node {
-          label 'windows-1'
-        }
-
-      }
+      
       steps {
         bat(label: 'Hello Docker', script: 'echo Hello from pipeline')
       }
